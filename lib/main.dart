@@ -44,6 +44,12 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
     ),
   ];
 
+  void _addExpense(Expense expense) {
+    setState(() {
+      _expenses.add(expense);
+    });
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
@@ -52,8 +58,13 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
         IconButton(
           onPressed: () {
             showModalBottomSheet(
+              showDragHandle: true,
+              isScrollControlled: true,
+              useSafeArea: true,
               context: context,
-              builder: (BuildContext context) => const AddExpense(),
+              builder:
+                  (BuildContext context) =>
+                      AddExpense(onAddExpense: _addExpense),
             );
           },
           icon: const Icon(Icons.add),
