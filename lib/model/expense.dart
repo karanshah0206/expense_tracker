@@ -14,6 +14,13 @@ const categoryIcons = {
   Category.work: Icons.work,
 };
 
+const categoryFormattedNames = {
+  Category.food: 'Food',
+  Category.travel: 'Travel',
+  Category.leisure: 'Leisure',
+  Category.work: 'Work',
+};
+
 class Expense {
   final String id;
   final String title;
