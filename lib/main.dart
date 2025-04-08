@@ -50,6 +50,30 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
     });
   }
 
+  void _removeExpense(Expense expense) {
+    final expenseIndex = _expenses.indexOf(expense);
+
+    setState(() {
+      _expenses.remove(expense);
+    });
+
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 3),
+        content: const Text('Expense deleted.'),
+        action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () {
+            setState(() {
+              _expenses.insert(expenseIndex, expense);
+            });
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
@@ -71,6 +95,6 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
         ),
       ],
     ),
-    body: ExpenseList(_expenses),
+    body: ExpenseList(expenses: _expenses, onRemoveExpense: _removeExpense),
   );
 }
