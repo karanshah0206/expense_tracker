@@ -13,8 +13,46 @@ class AddExpense extends StatefulWidget {
 class _AddExpenseState extends State<AddExpense> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
-  DateTime? _selectedDate = DateTime.now();
+  DateTime _selectedDate = DateTime.now();
   Category _selectedCategory = Category.food;
+  bool _titleHasError = false;
+  bool _amountHasError = false;
+
+  void _validateTitleInput() {
+    setState(() {
+      _titleHasError = false;
+    });
+
+    if (_titleController.text.isEmpty) {
+      setState(() {
+        _titleHasError = true;
+      });
+    }
+  }
+
+  void _validateAmountInput() {
+    setState(() {
+      _amountHasError = false;
+    });
+
+    if (double.tryParse(_amountController.text) == null) {
+      setState(() {
+        _amountHasError = true;
+      });
+    }
+  }
+
+  void _addExpense() {
+    _titleController.text = _titleController.text.trim();
+    _amountController.text = _amountController.text.trim();
+
+    _validateTitleInput();
+    _validateAmountInput();
+
+    if (!_amountHasError && !_titleHasError) {
+      // TODO
+    }
+  }
 
   void _showDatePicker() {
     showDatePicker(
@@ -39,14 +77,26 @@ class _AddExpenseState extends State<AddExpense> {
         children: [
           TextField(
             controller: _titleController,
-            decoration: const InputDecoration(label: Text('Expense title')),
+            onChanged: (_) {
+              _validateTitleInput();
+            },
+            decoration: InputDecoration(
+              label: const Text('Expense title'),
+              errorText:
+                  _titleHasError ? 'Expense title cannot be empty.' : null,
+            ),
           ),
           TextField(
             controller: _amountController,
+            onChanged: (_) {
+              _validateAmountInput();
+            },
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               prefixText: '\$',
-              label: Text('Amount'),
+              label: const Text('Amount'),
+              errorText:
+                  _amountHasError ? 'Valid numeric amount is rqeuired.' : null,
             ),
           ),
           const SizedBox(height: 16),
@@ -75,11 +125,7 @@ class _AddExpenseState extends State<AddExpense> {
               TextButton.icon(
                 onPressed: _showDatePicker,
                 icon: const Icon(Icons.calendar_month),
-                label: Text(
-                  _selectedDate == null
-                      ? 'Select Date'
-                      : formatter.format(_selectedDate!),
-                ),
+                label: Text(formatter.format(_selectedDate)),
               ),
             ],
           ),
@@ -93,9 +139,7 @@ class _AddExpenseState extends State<AddExpense> {
                 child: const Text('Cancel'),
               ),
               ElevatedButton(
-                onPressed: () {
-                  // TODO
-                },
+                onPressed: _addExpense,
                 child: const Text('Add Expense'),
               ),
             ],
