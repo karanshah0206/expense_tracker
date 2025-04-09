@@ -21,17 +21,17 @@ class ExpenseListItem extends StatelessWidget {
       color: Theme.of(context).colorScheme.error,
       child: Row(
         children: [
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Icon(
             Icons.delete_forever,
             color: Theme.of(context).colorScheme.onError,
           ),
-          Spacer(),
+          const Spacer(),
           Icon(
             Icons.delete_forever,
             color: Theme.of(context).colorScheme.onError,
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
         ],
       ),
     ),

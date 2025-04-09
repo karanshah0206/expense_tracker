@@ -12,23 +12,19 @@ class ExpenseByCategoryBar extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        child: FractionallySizedBox(
-          heightFactor: barSize / ceilingSize,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(8),
-              ),
-              color: color,
-            ),
+  Widget build(BuildContext context) => Expanded(
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: FractionallySizedBox(
+        heightFactor: barSize / ceilingSize,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+            color: color,
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
 }
