@@ -1,6 +1,7 @@
 import 'package:expense_tracker/widgets/add_expense.dart';
 import 'package:expense_tracker/widgets/expense_by_category_chart.dart';
 import 'package:expense_tracker/widgets/expense_list_item.dart';
+import 'package:expense_tracker/widgets/no_data_found.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_tracker/model/expense.dart';
 
@@ -64,32 +65,17 @@ class ExpenseTrackerApp extends StatefulWidget {
 }
 
 class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
-  final List<Expense> _expenses = [
-    Expense(
-      title: 'Porsche Taycan Turbo S',
-      amount: 400000.01,
-      dateTime: DateTime.now(),
-      category: Category.travel,
-    ),
-    Expense(
-      title: 'Vietnamese Iced Coffee',
-      amount: 4.2,
-      dateTime: DateTime.now(),
-      category: Category.food,
-    ),
-    Expense(
-      title: 'Fitness equipment for mom',
-      amount: 108.12,
-      dateTime: DateTime.now(),
-      category: Category.leisure,
-    ),
-    Expense(
-      title: 'Office rent payment',
-      amount: 2477,
-      dateTime: DateTime.now(),
-      category: Category.work,
-    ),
-  ];
+  final List<Expense> _expenses = [];
+
+  void _openAddExpenseForm() {
+    showModalBottomSheet(
+      showDragHandle: true,
+      isScrollControlled: true,
+      useSafeArea: true,
+      context: context,
+      builder: (BuildContext context) => AddExpense(onAddExpense: _addExpense),
+    );
+  }
 
   void _addExpense(Expense expense) {
     setState(() {
@@ -122,43 +108,42 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      title: const Text('Expense Tracker'),
-      actions: [
-        IconButton(
-          onPressed: () {
-            showModalBottomSheet(
-              showDragHandle: true,
-              isScrollControlled: true,
-              useSafeArea: true,
-              context: context,
-              builder:
-                  (BuildContext context) =>
-                      AddExpense(onAddExpense: _addExpense),
-            );
-          },
-          icon: const Icon(Icons.add),
-        ),
-      ],
-    ),
-    body: ListView.builder(
-      itemCount: _expenses.length + 1,
-      itemBuilder:
-          (BuildContext context, int index) =>
-              index == 0
-                  ? ExpenseByCategoryChart(
-                    expenses: _expenses,
-                    colorScheme:
-                        MediaQuery.of(context).platformBrightness ==
-                                Brightness.dark
-                            ? kDarkColorScheme
-                            : kLightColorScheme,
-                  )
-                  : ExpenseListItem(
-                    expense: _expenses[index - 1],
-                    onDismiss: _removeExpense,
-                  ),
-    ),
-  );
+  Widget build(BuildContext context) {
+    final colorScheme =
+        MediaQuery.of(context).platformBrightness == Brightness.dark
+            ? kDarkColorScheme
+            : kLightColorScheme;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Expense Tracker'),
+        actions: [
+          IconButton(
+            onPressed: _openAddExpenseForm,
+            icon: const Icon(Icons.add),
+          ),
+        ],
+      ),
+      body:
+          _expenses.isEmpty
+              ? NoDataFound(
+                onTapAction: _openAddExpenseForm,
+                colorScheme: colorScheme,
+              )
+              : ListView.builder(
+                itemCount: _expenses.length + 1,
+                itemBuilder:
+                    (BuildContext context, int index) =>
+                        index == 0
+                            ? ExpenseByCategoryChart(
+                              expenses: _expenses,
+                              colorScheme: colorScheme,
+                            )
+                            : ExpenseListItem(
+                              expense: _expenses[index - 1],
+                              onDismiss: _removeExpense,
+                            ),
+              ),
+    );
+  }
 }
