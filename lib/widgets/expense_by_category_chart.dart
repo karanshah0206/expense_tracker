@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:expense_tracker/model/expense.dart';
-import 'package:expense_tracker/widgets/category_bar.dart';
+import 'package:expense_tracker/widgets/expense_by_category_bar.dart';
 
-class Chart extends StatelessWidget {
+class ExpenseByCategoryChart extends StatelessWidget {
   final Map<Category, double> _buckets;
   final ColorScheme colorScheme;
 
-  Chart({super.key, required List<Expense> expenses, required this.colorScheme})
-    : _buckets = {
-        for (Category category in Category.values)
-          category: expenses
-              .where((expense) => expense.category == category)
-              .fold(0.0, (sum, expense) => sum + expense.amount),
-      };
+  ExpenseByCategoryChart({
+    super.key,
+    required List<Expense> expenses,
+    required this.colorScheme,
+  }) : _buckets = {
+         for (Category category in Category.values)
+           category: expenses
+               .where((expense) => expense.category == category)
+               .fold(0.0, (sum, expense) => sum + expense.amount),
+       };
 
   double get _maxNetExpense {
     double result = 0;
@@ -51,7 +54,7 @@ class Chart extends StatelessWidget {
               children: [
                 for (Category category in Category.values)
                   Expanded(
-                    child: ChartBar(
+                    child: ExpenseByCategoryBar(
                       barSize: _buckets[category]!,
                       ceilingSize: _maxNetExpense,
                       color: colorScheme.primary,

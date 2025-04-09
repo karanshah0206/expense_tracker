@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class ChartBar extends StatelessWidget {
+class ExpenseByCategoryBar extends StatelessWidget {
   final double barSize, ceilingSize;
   final Color color;
 
-  const ChartBar({
+  const ExpenseByCategoryBar({
     required this.barSize,
     required this.ceilingSize,
     required this.color,
