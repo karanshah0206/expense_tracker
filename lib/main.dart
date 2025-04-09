@@ -1,5 +1,6 @@
 import 'package:expense_tracker/widgets/add_expense.dart';
-import 'package:expense_tracker/widgets/expense_list.dart';
+import 'package:expense_tracker/widgets/expense_by_category_chart.dart';
+import 'package:expense_tracker/widgets/expense_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_tracker/model/expense.dart';
 
@@ -18,10 +19,10 @@ void main() {
       theme: ThemeData.light().copyWith(
         colorScheme: kLightColorScheme,
         appBarTheme: const AppBarTheme().copyWith(
-          foregroundColor: kLightColorScheme.onPrimaryContainer,
-          backgroundColor: kLightColorScheme.primaryContainer,
+          foregroundColor: kLightColorScheme.primary,
+          centerTitle: true,
+          backgroundColor: ThemeData.light().scaffoldBackgroundColor,
         ),
-        scaffoldBackgroundColor: kLightColorScheme.primaryContainer,
         cardTheme: const CardTheme().copyWith(
           color: kLightColorScheme.inversePrimary,
           margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -36,6 +37,8 @@ void main() {
         colorScheme: kDarkColorScheme,
         appBarTheme: const AppBarTheme().copyWith(
           foregroundColor: kDarkColorScheme.primary,
+          centerTitle: true,
+          backgroundColor: ThemeData.dark().scaffoldBackgroundColor,
         ),
         cardTheme: const CardTheme().copyWith(
           color: kDarkColorScheme.inversePrimary,
@@ -139,6 +142,23 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
         ),
       ],
     ),
-    body: ExpenseList(expenses: _expenses, onRemoveExpense: _removeExpense),
+    body: ListView.builder(
+      itemCount: _expenses.length + 1,
+      itemBuilder:
+          (BuildContext context, int index) =>
+              index == 0
+                  ? ExpenseByCategoryChart(
+                    expenses: _expenses,
+                    colorScheme:
+                        MediaQuery.of(context).platformBrightness ==
+                                Brightness.dark
+                            ? kDarkColorScheme
+                            : kLightColorScheme,
+                  )
+                  : ExpenseListItem(
+                    expense: _expenses[index - 1],
+                    onDismiss: _removeExpense,
+                  ),
+    ),
   );
 }
