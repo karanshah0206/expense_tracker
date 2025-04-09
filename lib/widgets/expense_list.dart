@@ -22,13 +22,19 @@ class ExpenseList extends StatelessWidget {
             onRemoveExpense(expenses[index]);
           },
           background: Container(
-            color: Colors.red,
-            child: const Row(
+            color: Theme.of(context).colorScheme.error,
+            child: Row(
               children: [
                 SizedBox(width: 16),
-                Icon(Icons.delete_forever, color: Colors.white),
+                Icon(
+                  Icons.delete_forever,
+                  color: Theme.of(context).colorScheme.onError,
+                ),
                 Spacer(),
-                Icon(Icons.delete_forever, color: Colors.white),
+                Icon(
+                  Icons.delete_forever,
+                  color: Theme.of(context).colorScheme.onError,
+                ),
                 SizedBox(width: 16),
               ],
             ),

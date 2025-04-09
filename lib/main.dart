@@ -3,8 +3,52 @@ import 'package:expense_tracker/widgets/expense_list.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_tracker/model/expense.dart';
 
+final ColorScheme kLightColorScheme = ColorScheme.fromSeed(
+  seedColor: const Color.fromARGB(255, 139, 195, 74),
+);
+final ColorScheme kDarkColorScheme = ColorScheme.fromSeed(
+  brightness: Brightness.dark,
+  seedColor: const Color.fromARGB(255, 139, 195, 74),
+);
+
 void main() {
-  runApp(const MaterialApp(home: ExpenseTrackerApp()));
+  runApp(
+    MaterialApp(
+      home: const ExpenseTrackerApp(),
+      theme: ThemeData.light().copyWith(
+        colorScheme: kLightColorScheme,
+        appBarTheme: const AppBarTheme().copyWith(
+          foregroundColor: kLightColorScheme.onPrimaryContainer,
+          backgroundColor: kLightColorScheme.primaryContainer,
+        ),
+        scaffoldBackgroundColor: kLightColorScheme.primaryContainer,
+        cardTheme: const CardTheme().copyWith(
+          color: kLightColorScheme.inversePrimary,
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: kLightColorScheme.secondaryContainer,
+          ),
+        ),
+      ),
+      darkTheme: ThemeData.dark().copyWith(
+        colorScheme: kDarkColorScheme,
+        appBarTheme: const AppBarTheme().copyWith(
+          foregroundColor: kDarkColorScheme.primary,
+        ),
+        cardTheme: const CardTheme().copyWith(
+          color: kDarkColorScheme.inversePrimary,
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: kDarkColorScheme.secondaryContainer,
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 class ExpenseTrackerApp extends StatefulWidget {
