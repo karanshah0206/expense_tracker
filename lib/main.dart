@@ -24,7 +24,7 @@ void main() {
           centerTitle: true,
           backgroundColor: ThemeData.light().scaffoldBackgroundColor,
         ),
-        cardTheme: const CardTheme().copyWith(
+        cardTheme: const CardThemeData().copyWith(
           color: kLightColorScheme.inversePrimary,
           margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         ),
@@ -41,7 +41,7 @@ void main() {
           centerTitle: true,
           backgroundColor: ThemeData.dark().scaffoldBackgroundColor,
         ),
-        cardTheme: const CardTheme().copyWith(
+        cardTheme: const CardThemeData().copyWith(
           color: kDarkColorScheme.inversePrimary,
           margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         ),
