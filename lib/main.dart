@@ -107,12 +107,64 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
     );
   }
 
+  Widget _portraitView(ColorScheme colorScheme) {
+    return _expenses.isEmpty
+        ? NoDataFound(
+          onTapAction: _openAddExpenseForm,
+          colorScheme: colorScheme,
+        )
+        : ListView.builder(
+          itemCount: _expenses.length + 1,
+          itemBuilder:
+              (BuildContext context, int index) =>
+                  index == 0
+                      ? ExpenseByCategoryChart(
+                        expenses: _expenses,
+                        colorScheme: colorScheme,
+                      )
+                      : ExpenseListItem(
+                        expense: _expenses[index - 1],
+                        onDismiss: _removeExpense,
+                      ),
+        );
+  }
+
+  Widget _landscapeView(ColorScheme colorScheme) {
+    return _expenses.isEmpty
+        ? NoDataFound(
+          onTapAction: _openAddExpenseForm,
+          colorScheme: colorScheme,
+        )
+        : Row(
+          children: [
+            Expanded(
+              child: ExpenseByCategoryChart(
+                expenses: _expenses,
+                colorScheme: colorScheme,
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _expenses.length,
+                itemBuilder:
+                    (BuildContext context, int index) => ExpenseListItem(
+                      expense: _expenses[index],
+                      onDismiss: _removeExpense,
+                    ),
+              ),
+            ),
+          ],
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme =
         MediaQuery.of(context).platformBrightness == Brightness.dark
             ? kDarkColorScheme
             : kLightColorScheme;
+
+    final deviceWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: AppBar(
@@ -125,25 +177,9 @@ class _ExpenseTrackerAppState extends State<ExpenseTrackerApp> {
         ],
       ),
       body:
-          _expenses.isEmpty
-              ? NoDataFound(
-                onTapAction: _openAddExpenseForm,
-                colorScheme: colorScheme,
-              )
-              : ListView.builder(
-                itemCount: _expenses.length + 1,
-                itemBuilder:
-                    (BuildContext context, int index) =>
-                        index == 0
-                            ? ExpenseByCategoryChart(
-                              expenses: _expenses,
-                              colorScheme: colorScheme,
-                            )
-                            : ExpenseListItem(
-                              expense: _expenses[index - 1],
-                              onDismiss: _removeExpense,
-                            ),
-              ),
+          deviceWidth < 650
+              ? _portraitView(colorScheme)
+              : _landscapeView(colorScheme),
     );
   }
 }
